@@ -7,6 +7,7 @@
 echo('	<nav id="nav">
             <ul class="links">
                 <li class="active"><a href="index.php">This is Massively</a></li>
+                <li><a href="generic.php">About Me</a></li>
                 <li><a href="generic.php">Generic Page</a></li>
                 <li><a href="elements.php">Elements Reference</a></li>
             </ul>

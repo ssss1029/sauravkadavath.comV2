@@ -29,7 +29,7 @@
 								</header>
 								<a href="#" class="image main"><img src="images/berkeley.jpg" alt="" /></a>
 								<ul class="actions">
-									<li><a href="#" class="button big">Keep Reading</a></li>
+									<li><a href="about.php" class="button big">Keep Reading</a></li>
 								</ul>
 							</article>
 
@@ -43,7 +43,7 @@
 									<a href="#" class="image fit"><img src="images/newssight.png" alt="" /></a>
 									<p>A new type of news aggreagator that is able to intelligently classify articles, letting people easily understand the news that they are consuming. This is my personal spinoff off of <a href="#">Polisight</a>, and I've been working on this extensively this summer.</p>
 									<ul class="actions">
-										<li><a href="#" class="button">Full Story</a></li>
+										<li><a href="newssight.php" class="button">Full Story</a></li>
 									</ul>
 								</article>
 								<article>
@@ -54,7 +54,7 @@
 									<a href="#" class="image fit"><img src="images/polisight.jpg" alt="" /></a>
 									<p>A web app that I co-developed in 24 hours at <a target="_blank" href="https://calhacks.io/"> CalHacks</a>.</p>
 									<ul class="actions">
-										<li><a href="#" class="button">Full Story</a></li>
+										<li><a href="polisight.php" class="button">Full Story</a></li>
 									</ul>
 								</article>
 								<article>
@@ -62,10 +62,10 @@
 										<span class="date">August 21, 2015</span>
 										<h2><a href="#">Rummage</a></h2>
 									</header>
-									<a href="#" class="image fit"><img src="images/rummage.png" alt="" /></a>
+									<a href="#" class="image fit"><img src="images/rummagelogo.png" alt="" /></a>
 									<p>A Google Chrome Extension that extends the capabilities of the Google search engine.</p>
 									<ul class="actions">
-										<li><a href="#" class="button">Full Story</a></li>
+										<li><a href="rummage.php" class="button">Full Story</a></li>
 									</ul>
 								</article>
 								<article>
@@ -76,7 +76,7 @@
 									<a href="#" class="image fit"><img src="images/berkeley.jpg" alt="Berkeley" /></a>
 									<p>Some stuff here</p>
 									<ul class="actions">
-										<li><a href="#" class="button">Full Story</a></li>
+										<li><a href="about.php" class="button">Full Story</a></li>
 									</ul>
 								</article>
 							</section>

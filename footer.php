@@ -41,7 +41,6 @@ echo('
             <section>
                 <h3>Social</h3>
                 <ul class="icons alt">
-                    <li><a href="#" class="icon alt fa-facebook"><span class="label">Facebook</span></a></li>
                     <li><a href="#" class="icon alt fa-github"><span class="label">GitHub</span></a></li>
                     <li><a href="#" class="icon alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
                 </ul>

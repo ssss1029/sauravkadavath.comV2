@@ -25,9 +25,7 @@
 							<article class="post featured">
 								<header class="major">
 									<h2><a href="#">About Me</a></h2>
-									<p>Aenean ornare velit lacus varius enim ullamcorper proin aliquam<br />
-									facilisis ante sed etiam magna interdum congue. Lorem ipsum dolor<br />
-									amet nullam sed etiam veroeros.</p>
+									<p>Some stuff here</p>
 								</header>
 								<a href="#" class="image main"><img src="images/berkeley.jpg" alt="" /></a>
 								<ul class="actions">
@@ -66,6 +64,17 @@
 									</header>
 									<a href="#" class="image fit"><img src="images/rummage.png" alt="" /></a>
 									<p>A Google Chrome Extension that extends the capabilities of the Google search engine.</p>
+									<ul class="actions">
+										<li><a href="#" class="button">Full Story</a></li>
+									</ul>
+								</article>
+								<article>
+									<header>
+										<span class="date">August 12, 2017</span>
+										<h2><a href="#">About Me</a></h2>
+									</header>
+									<a href="#" class="image fit"><img src="images/berkeley.jpg" alt="Berkeley" /></a>
+									<p>Some stuff here</p>
 									<ul class="actions">
 										<li><a href="#" class="button">Full Story</a></li>
 									</ul>

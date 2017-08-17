@@ -25,25 +25,22 @@
                         <!-- Post -->
                         <section class="post">
                             <header class="major">
-                                <span class="date">April 25, 2017</span>
-                                <h1>This is a<br />
-                                Generic Page</h1>
-                                <p>Aenean ornare velit lacus varius enim ullamcorper proin aliquam<br />
-                                facilisis ante sed etiam magna interdum congue. Lorem ipsum dolor<br />
-                                amet nullam sed etiam veroeros.</p>
+                                <span class="date">August 12, 2017</span>
+                                <h1>About Me</h1>
                             </header>
                             <div class="image main"><img src="images/berkeley.jpg" alt="" /></div>
-                            <p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur sapien risus, commodo eget turpis at, elementum convallis enim turpis, lorem ipsum dolor sit amet nullam.</p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus. Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum.</p>
+                            <p>Hey there! I'm an Electrical Engineering &amp; Computer Science maor at UC Berkeley (possibly also a math minor; we'll see I guess). I'm using this website as a way for to keep track of all the problems that I encounter on my compuuting adventures - and hopefully it also helps out anyone who is trying to do some similar stuff.</p>
+                            <p>I'll try my best to keep all of my posts simple and easy to follow so that they're accessible to everyone. Shoot me a message if you have any questions or comments about anything that you find here.</p>
+                            <h3>Current and Past projects</h3>
+                            <p>Currently, I'm managing a project at <a href="http://www.codebase.berkeley.edu">Codebase @ Berkeley</a>. We're making some scalable queueing infrastructure on <a href="https://aws.amazon.com/">AWS</a> for a startup here in the Bay Area. I'm also working on a project that I'm going to call <a href="newssight.php">NewsSight</a> for now. You can take a look the source code on my <a href="https://github.com/ssss1029">GitHub</a>.</p>
                         </section>
-
                     </div>
 
 				<!-- Footer -->
 				<?php include('footer.php') ?>
 
 				<!-- Copyright -->
-				<?php include('copyight.php') ?>
+				<?php include('copyright.php') ?>
 
 			</div>
 

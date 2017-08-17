@@ -26,15 +26,12 @@
                         <section class="post">
                             <header class="major">
                                 <span class="date">April 25, 2017</span>
-                                <h1>This is a<br />
-                                Generic Page</h1>
-                                <p>Aenean ornare velit lacus varius enim ullamcorper proin aliquam<br />
-                                facilisis ante sed etiam magna interdum congue. Lorem ipsum dolor<br />
-                                amet nullam sed etiam veroeros.</p>
+                                <h1>Rummage</h1>
+                                <p>Googling thru your personal files?</p>
                             </header>
                             <div class="image main"><img src="images/rummage.png" alt="" /></div>
-                            <p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur sapien risus, commodo eget turpis at, elementum convallis enim turpis, lorem ipsum dolor sit amet nullam.</p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus. Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum.</p>
+                            <p>The inspiration for Rummage came to me when I began thinking of when I noticed how websites were getting more and more personal and dynamic based on the user viewing the page. For example, we have our own personal YouTube homepages (everyone has a different set of vidoes that shows up at their home page). Interestingly, there was not much personalization when it came to search engines. In comes Rummage, which is designed to piggyback on Google searches, and in addition to normal web results that Google would return, Rummage would also add in results from users' Box, Dropbox, or GMail accounts. </p>
+                            <p>Rummage started off as a super barebones Chrome Application that I began developing at a hackathon back when I has a junior in high school. I worked with a <a href="http://anuragpapolu.github.io/">partner</a>, and although we didn't finish the application in the allotted 24 hours, I decided to keep working at the idea in my spare time. My senior year in high school, I ended up redoing the entire project for fun, and decided to put it up on the <a href="https://chrome.google.com/webstore/detail/rummage/pahcjlpnciigaejakjnndfmmnppihhmg?hl=en"> Chrome Store </a>.</p>
                         </section>
 
                     </div>
@@ -43,7 +40,7 @@
 				<?php include('footer.php') ?>
 
 				<!-- Copyright -->
-				<?php include('copyight.php') ?>
+				<?php include('copyright.php') ?>
 
 			</div>
 

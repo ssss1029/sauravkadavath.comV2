@@ -27,7 +27,7 @@
 				<?php include('footer.php') ?>
 
 				<!-- Copyright -->
-				<?php include('copyight.php') ?>
+				<?php include('copyright.php') ?>
 
 			</div>
 

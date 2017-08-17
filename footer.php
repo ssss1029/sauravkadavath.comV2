@@ -7,7 +7,7 @@
 echo('					
     <footer id="footer">
         <section>
-            <form method="post" action="#">
+            <form method="post" action="none">
                 <div class="field">
                     <label for="name">Name</label>
                     <input type="text" name="name" id="name" />
@@ -21,7 +21,7 @@ echo('
                     <textarea name="message" id="message" rows="3"></textarea>
                 </div>
                 <ul class="actions">
-                    <li><input type="submit" value="Send Message" /></li>
+                    <li><input type="submit" id="footerSubmitButton" value="Send Message" /></li>
                 </ul>
             </form>
         </section>

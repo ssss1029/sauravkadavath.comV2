@@ -7,8 +7,8 @@
 echo('
 
 	<div id="intro">
-            <h1>Saurav Kadavath</h1>
-            <p> Some catchy tagline here <br /> Student at UC Berkeley</p>           
+            <h1> Saurav Kadavath </h1>
+            <p> Student @ UC Berkeley EECS</p>           
             <ul class="actions">
                 <li><a href="#header" class="button icon solo fa-arrow-down scrolly">Continue</a></li>
             </ul>

@@ -38,7 +38,7 @@
 								<article>
 									<header>
 										<span class="date">August 17, 2017</span>
-										<h2><a href="#">Setting up AWS and FIFO SQS with Python and Boto3</a></h2>
+										<h2><a href="awssqspythonboto3.php">Setting up AWS and FIFO SQS with Python and Boto3</a></h2>
 									</header>
 									<a href="awssqspythonboto3.php" class="image fit"><img src="images/pic03.jpg" alt="" /></a>
 									<p> Some stuff here </p>
@@ -49,7 +49,7 @@
 								<article>
 									<header>
 										<span class="date">August 12, 2017</span>
-										<h2><a href="#">Newssight</a></h2>
+										<h2><a href="newssight.php">Newssight</a></h2>
 									</header>
 									<a href="newssight.php" class="image fit"><img src="images/newssight.png" alt="" /></a>
 									<p>A new type of news aggreagator that is able to intelligently classify articles, letting people easily understand the news that they are consuming. This is my personal spinoff off of <a href="#">Polisight</a>, and I've been working on this extensively this summer.</p>
@@ -60,7 +60,7 @@
 								<article>
 									<header>
 										<span class="date">November 13, 2016</span>
-										<h2><a href="#">Polisight</a></h2>
+										<h2><a href="polisight.php">Polisight</a></h2>
 									</header>
 									<a href="polisight.php" class="image fit"><img src="images/polisight.jpg" alt="" /></a>
 									<p>A web app that I co-developed in 24 hours at <a target="_blank" href="https://calhacks.io/"> CalHacks</a>.</p>
@@ -71,7 +71,7 @@
 								<article>
 									<header>
 										<span class="date">August 21, 2015</span>
-										<h2><a href="#">Rummage</a></h2>
+										<h2><a href="rummage.php">Rummage</a></h2>
 									</header>
 									<a href="rummage.php" class="image fit"><img src="images/rummagelogo.png" alt="" /></a>
 									<p>A Google Chrome Extension that extends the capabilities of the Google search engine.</p>
@@ -82,7 +82,7 @@
 								<article>
 									<header>
 										<span class="date">August 12, 2017</span>
-										<h2><a href="#">About Me</a></h2>
+										<h2><a href="about.php">About Me</a></h2>
 									</header>
 									<a href="about.php" class="image fit"><img src="images/berkeley.jpg" alt="Berkeley" /></a>
 									<p>Some stuff here</p>

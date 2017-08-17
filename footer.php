@@ -28,11 +28,11 @@ echo('
         <section class="split contact">
             <section class="alt">
                 <h3>Resume</h3>
-                <p>Download Here</p>
+                <p><a href="Resume_SauravK_V2.pdf" target="_blank">Download Here</p>
             </section>
             <section>
                 <h3>Phone</h3>
-                <p><a href="#">(978) 337-3285</a></p>
+                <p><a>(978) 337-3285</a></p>
             </section>
             <section>
                 <h3>Email</h3>

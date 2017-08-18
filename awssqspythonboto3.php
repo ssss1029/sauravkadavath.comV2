@@ -47,7 +47,92 @@
 										</ul>
 									</li>
 									<li>
-										Now, let's make a virtual environment for our project to live in. Run <code>virtualenv &lt; path_to_environment_folder &gt; </code>. You can choose where to save all of the environment dependency files. For example, I chose to run <code>virtualenv C:/eb-env</code>, and all of my 
+										Now, let's make a virtual environment for our project. Run <code>virtualenv &lt;path_to_environment_folder&gt; </code>. You can choose where to save all of the environment dependency files. For example, I chose to run <code>virtualenv C:/eb-env</code>, and all of my virtual environment files were saved in <code>C:/eb-env</code>. If you take a look inside the folder that you chose as your environment folder, you can find a fresh install of tools like python and <code>pip</code>. For the following steps, I'll use <code>C:/eb-env</code> when referring to the virtual environment path.
+									</li>
+									<li>
+										Activate your virtual environment. Inside the environment that you made, there is a script called <code>activate</code>. We'll need to run this with the <code>source</code> command. For example, I ran: <code>source C:/eb-env/Scripts/activate</code>. For Mac or Linux users, the script is probably going to live inside a <code>bin/</code> folder in your virtual environment folder. What running this script will do is change the <code>python</code> and <code>pip</code> commands on your terminal to temporarily use the files in the virtual environment, not from your global install. Thus, whenever you want to use the virtual environment, you have to run <code>source C:/eb-env/Scripts/activate</code> <b>each time you open a new terminal.</b>
+									</li>
+									<li>
+										<code>pip install django</code>. Remember, this is the <code>pip</code> running from the virtual environment
+									</li>
+									<li>
+										Set up a Django dummy project that we can push to Elastic Beanstalk. Navigate to the folder in which you want your project to live and run <code>django-admin startproject eb-django-proj-1</code>. This is just a 'default' project that does nothing. In order to run it, <code>cd eb-django-proj-1</code> and then <code>python manage.py runserver</code> and then go to the <code>http://127.0.0.1:8000</code>. I found <a href="https://www.youtube.com/watch?v=qgGIqRFvFFk&list=PL6gx4Cwl9DGBlmzzFcLgDhKTTfNLfX1IK">these</a> Django tutorials super helpful.
+									</li>
+									<li>
+										To verify that Django has been installed, type in <code>pip freeze</code>. You should see that Django is installed, and maybe a small amount of its dependencies. The main thing is that you should not see the same massive list of dependencies that you would see if you typed in <code>pip freeze</code> from your global environment. To exit out of your virtual environment, typr in <code>deactivate</code>.
+									</li>
+								</ol>
+								<h3>AWS</h3>
+								So now, we basically have all the tool on our computer to develop self-contained Django apps. Now, lets work on moving our work into AWS. If you're the one making the AWS resources yourself, keep reading. Otherwise, if you are an <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html">IAM User</a>, ask your AWS system administrator to give you an access key and access secret, and skip to step X.
+								<ol>
+									<li>
+										Make an Elastic Beanstalk application for Python. This will also set up a default environment for Python. Wait for the system to show a green checkmark, and visit the application to make sure you have the default AWS Sample Application running properly
+									</li>
+									<li>
+										In order to deploy our app from our local machine to AWS, we're going to need an access key and secret. Go to the top right of your Elastic Beanstalk dashboard and click on your name, on from the dropdown, click "My Security Credentials". Here, you can set up an access key/secret for yourself. Be sure to keep these safe, as you only get to see them once.
+										<br />
+										Note: If you have other people that you want to be able to deploy to your EB environments, you can create <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html">IAM Users</a> fro each person, and give them their own access keys and secrets.
+									</li>
+									<li>
+										On your local machine, make sure that you are on your global environment, and run <code>pip install awsebcli</code>. This is the <a href="https://en.wikipedia.org/wiki/Command-line_interface">CLI</a> that lets us talk to our EB instances. After you do this, you should be able to find the AWS CLI configuration file – located at <code> ~/.aws/config </code> on Linux and OS X systems or <code>C:\Users\USERNAME\.aws\config</code> on Windows systems. Go into this file and paste the following code in:
+										<pre><code>
+[profile eb-cli]
+aws_access_key_id = &lt;YOUR_AWS_ACCESS_KEY&gt;
+aws_secret_access_key = &lt;YOUR_AWS_ACCESS_KEY_SECRET&gt;
+
+[default]
+aws_access_key_id = &lt;YOUR_AWS_ACCESS_KEY&gt;
+aws_secret_access_key = &lt;YOUR_AWS_ACCESS_KEY_SECRET&gt;
+
+[default]
+region=us-west-2
+										</code></pre>
+										Save this stuff, and open a new terminal for the following steps.
+									</li>
+									<li>
+										Navigate to where your Django project is located. Run <code>eb init</code>. This should give you a series of questions to answer. Your EB apps and environments that you set up already should come up, so you can choose those. For example, I got something like this (I have multiple environments for my project right now):
+										<pre><code>
+C:/Saurav/djangotuts$ eb init
+
+Select a default region
+1) us-east-1 : US East (N. Virginia)
+2) us-west-1 : US West (N. California)
+3) us-west-2 : US West (Oregon)
+4) eu-west-1 : EU (Ireland)
+5) eu-central-1 : EU (Frankfurt)
+6) ap-south-1 : Asia Pacific (Mumbai)
+7) ap-southeast-1 : Asia Pacific (Singapore)
+8) ap-southeast-2 : Asia Pacific (Sydney)
+9) ap-northeast-1 : Asia Pacific (Tokyo)
+10) ap-northeast-2 : Asia Pacific (Seoul)
+11) sa-east-1 : South America (Sao Paulo)
+12) cn-north-1 : China (Beijing)
+13) us-east-2 : US East (Ohio)
+14) ca-central-1 : Canada (Central)
+15) eu-west-2 : EU (London)
+(default is 3): 3
+
+Select an application to use
+1) django-tutorial
+2) [ Create new Application ]
+(default is 2): 1
+Select the default environment.
+You can change this later by typing "eb use [environment_name]".
+1) my-worker-env
+2) my-env
+(default is 1): 1
+Cannot setup CodeCommit because there is no Source Control setup, continuing with initialization
+										</code></pre>
+
+									</li>
+									<li>
+										Now, if you run <code>eb open</code>, youll open the same default website as before. Now, lets push our own site.
+									</li>
+									<li>
+										First, remember the reason that we created a virtualenv at the beginning - to make sure we could keep track of all the requirements of the project. We'll write all of those requirements into a file that EB can read when we puch it. Run the following:
+										<pre><code>source C:/eb-env/Scripts/activate</code></pre>
+										<pre><code>cd &lt;YOUR_PROJ_DIRECTORY&gt;</code></pre>
+										<pre><code>pip freeze &lt; requirements.txt</code></pre>
 									</li>
 								</ol>
 								<p>More Coming Soon!</p>

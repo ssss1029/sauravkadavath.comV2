@@ -34,6 +34,10 @@
 							</article>
 
 						<!-- Posts -->
+							<section class="postsHeader">
+								<h2> <a name="posts" class="sectionizer" display="hidden">Posts</a> </h2>
+								<p>Check out some of the stuff I've been working on!</p>
+							</section>
 							<section class="posts">
 								<article>
 									<header>

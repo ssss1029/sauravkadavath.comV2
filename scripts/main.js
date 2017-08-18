@@ -36,7 +36,9 @@ $(document).ready(function() {
 
 		$.post( "processMessageSend.php", payload)
 		  .done(function( data ) {
-		    alert( "Data Loaded: " + data );
+		  	if (JSON.parse(data).msg_status == "ok"){
+		    	alert("Thanks for the message! I'll get back you as soon as I can.");
+			}
 		  })
 		  .fail(function(err) {
 		  	console.log(err);
@@ -46,6 +48,10 @@ $(document).ready(function() {
     		console.log( "finished" );
 		  });
 	});
+
+	$('.sectionizer').each(function() {
+		$(this).attr("display", "none");
+	})
 
 	// Make everything open in a new tab
 	$('a').each(function() {

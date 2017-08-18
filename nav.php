@@ -8,6 +8,7 @@ echo('	<nav id="nav">
             <ul class="links">
                 <li><a href="index.php">Home</a></li>
                 <li><a href="about.php">About Me</a></li>
+                <li><a href="index.php#posts">My Posts</a></li>
             </ul>
             <ul class="icons">
                 <li><a href="https://github.com/ssss1029" class="icon alt fa-github"><span class="label">GitHub</span></a></li>

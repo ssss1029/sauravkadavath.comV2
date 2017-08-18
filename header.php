@@ -5,7 +5,7 @@
 */
 
 echo('  <header id="header">
-            <a href="index.html" class="logo">Saurav Kadavath</a>
+            <a href="index.php" class="logo">Saurav Kadavath</a>
         </header>
     ')
 

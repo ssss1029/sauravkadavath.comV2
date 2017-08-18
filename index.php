@@ -25,7 +25,7 @@
 							<article class="post featured">
 								<header class="major">
 									<h2><a href="#">About Me</a></h2>
-									<p>Some stuff here</p>
+									<p>Student &amp; Developer</p>
 								</header>
 								<a href="about.php" class="image main"><img src="images/berkeley.jpg" alt="" /></a>
 								<ul class="actions">
@@ -41,7 +41,7 @@
 										<h2><a href="awssqspythonboto3.php">Setting up AWS and FIFO SQS with Python and Boto3</a></h2>
 									</header>
 									<a href="awssqspythonboto3.php" class="image fit"><img src="images/pic03.jpg" alt="" /></a>
-									<p> Some stuff here </p>
+									<p> Coming soon! </p>
 									<ul class="actions">
 										<li><a href="awssqspythonboto3.php" class="button">Full Story</a></li>
 									</ul>

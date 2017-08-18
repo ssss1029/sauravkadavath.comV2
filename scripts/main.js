@@ -40,12 +40,17 @@ $(document).ready(function() {
 		  })
 		  .fail(function(err) {
 		  	console.log(err);
-		    alert( "There was an error. Please contact me at sauravkadavath@berkeley.edu with you message, and i'd love to get back to you!" );
+		    alert( "There was an error. Please contact me at sauravkadavath@berkeley.edu with you message, and I'd love to get back to you!" );
   		  })
   		  .always(function() {
     		console.log( "finished" );
 		  });
 	});
+
+	// Make everything open in a new tab
+	$('a').each(function() {
+		$(this).attr("target", "_blank");
+	})
 });
 
 // Creds to https://stackoverflow.com/questions/46155/how-to-validate-email-address-in-javascript

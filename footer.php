@@ -41,8 +41,8 @@ echo('
             <section>
                 <h3>Social</h3>
                 <ul class="icons alt">
-                    <li><a href="#" class="icon alt fa-github"><span class="label">GitHub</span></a></li>
-                    <li><a href="#" class="icon alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+                    <li><a href="https://github.com/ssss1029" class="icon alt fa-github"><span class="label">GitHub</span></a></li>
+                    <li><a href="https://www.linkedin.com/in/saurav-kadavath-808b07132/" class="icon alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
                 </ul>
             </section>
         </section>

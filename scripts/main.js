@@ -49,7 +49,7 @@ $(document).ready(function() {
 
 	// Make everything open in a new tab
 	$('a').each(function() {
-		$(this).attr("target", "_blank");
+	//	$(this).attr("target", "_blank");
 	})
 });
 

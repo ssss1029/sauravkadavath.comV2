@@ -34,6 +34,24 @@
 								<div class="image main"><img src="images/pic01.jpg" alt="" /></div>
 								-->
 								<p>So for one of my projects at <a href="http://codebase.berkeley.edu">CodeBase</a>, we had to create a queuing system to handle large amounts of incoming requests for one of out clients. We decided to use a bunch of instances of AWS's brand-new FIFO SQS implementation + an Elastic Beanstalk Worker Environment to keep track of and process requests, while we used an Elastic Beanstalk Web Server environment running Django to handle web requests from clients and feed them to the SQS instances. While I was playing around with these services, I found that there was alot of good documentation about each service but relatively little when it came to starting from scratch (basically, I found all the documentation impossible to navigate as a novice developer) so I made this guide, noob-stlye. I'm writing this after going through the entire process, so its definitely possible that I missed steps. If that's the case, shoot me a message at sauravkadavath@berkeley.edu.</p>
+								<h3>Contents:</h3>
+								<ul>
+									<li>
+										Setting up your local computer for developing on Django / AWS
+									</li>
+									<li>
+										Setting up an AWS Elastic Beanstalk Web server running Python 2.7 and deploy a sample Django app on it from the AWS Elastic Beanstalk CLI
+									</li>
+									<li>
+										Creating a FIFO queue with Amazon SQS and communicating with it
+									</li>
+									<li>
+										Setting up an AWS Elastic Beanstalk Web Server Environment as a worker process with a python daemon wun with <code>supervisord</code>
+									</li>
+								</ul>
+
+								<p>After this, it should be easy to pull data from your SQS queue with your EB worker.</p>
+
 								<h3> Setting up our development environment </h3>
 								<p>We're going to be deploying <a href="https://aws.amazon.com/elasticbeanstalk/">AWS Elastic Beanstalk</a>, which is essentially a fancy web server that Amazon provides, and scales automatically and stuff. Here's a cool diagram of what it is basically from the AWS website:</p>
 								<div class="image main"><img src="images/aeb-architecture2.png"/></div>
@@ -62,11 +80,15 @@
 										To verify that Django has been installed, type in <code>pip freeze</code>. You should see that Django is installed, and maybe a small amount of its dependencies. The main thing is that you should not see the same massive list of dependencies that you would see if you typed in <code>pip freeze</code> from your global environment. To exit out of your virtual environment, typr in <code>deactivate</code>.
 									</li>
 								</ol>
-								<h3>AWS</h3>
-								So now, we basically have all the tool on our computer to develop self-contained Django apps. Now, lets work on moving our work into AWS. If you're the one making the AWS resources yourself, keep reading. Otherwise, if you are an <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html">IAM User</a>, ask your AWS system administrator to give you an access key and access secret, and skip to step X.
+								<h3>Setting up an AWS Elastic Beanstalk Web Server</h3>
+								So now, we basically have all the tool on our computer to develop self-contained Django apps. Now, lets work on moving our work into AWS. If you're the one making the AWS resources yourself, keep reading. Otherwise, if you are an <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html">IAM User</a>, ask your AWS system administrator to give you an access key and access secret, and skip to step 3.
 								<ol>
 									<li>
-										Make an Elastic Beanstalk application for Python. This will also set up a default environment for Python. Wait for the system to show a green checkmark, and visit the application to make sure you have the default AWS Sample Application running properly
+										Make an Elastic Beanstalk application for Python. When doing this, you must make sure that there is a key pair associated with this instance. In order to do this, make sure you have a key pair selected in the EC2 Key Pair dropdown menu: 
+										<div class="image main"><img src="images/ec2keypair.png"></div>
+										If this isn't there, make a new key pair and keep this file safe. Navigate to the AWS dashboard (cube on the top left, and choose EC2), and click on key pairs.
+										<div class="image main"><img src="images/keypairs.png"></div>
+										Keep stepping through the menus, and this will set up a default EB environment for Python. Wait for the system to show a green checkmark, and visit the application to make sure you have the default AWS Sample Application running properly
 									</li>
 									<li>
 										In order to deploy our app from our local machine to AWS, we're going to need an access key and secret. Go to the top right of your Elastic Beanstalk dashboard and click on your name, on from the dropdown, click "My Security Credentials". Here, you can set up an access key/secret for yourself. Be sure to keep these safe, as you only get to see them once.
@@ -132,9 +154,37 @@ Cannot setup CodeCommit because there is no Source Control setup, continuing wit
 										First, remember the reason that we created a virtualenv at the beginning - to make sure we could keep track of all the requirements of the project. We'll write all of those requirements into a file that EB can read when we puch it. Run the following:
 										<pre><code>source C:/eb-env/Scripts/activate</code></pre>
 										<pre><code>cd &lt;YOUR_PROJ_DIRECTORY&gt;</code></pre>
-										<pre><code>pip freeze &lt; requirements.txt</code></pre>
+										<pre><code>pip freeze &gt; requirements.txt</code></pre>
+									</li>
+									<li>
+										Now, we need to add a simple configuration file for our app so EB can actually run it properly. Make a directory called <code>.ebextensions</code> in your project folder, and create a file called <code>django.config</code> in it. Paste the following contents into the file:
+										<pre><code>
+option_settings:
+  aws:elasticbeanstalk:container:python:
+    WSGIPath: PATH_TO_WSGI.PY/wsgi.py
+										</code></pre>
+										Make sure to replace the path with the correct path to your <code>wsgi.py</code> file.
+									</li>
+									<li>
+										Now, run 
+										<pre><code>eb deploy</code></pre>
+										<pre><code>eb open</code></pre>
+										You should see your pushed website live on elastic beanstalk!
 									</li>
 								</ol>
+								<h3>Setting up AWS SQS and communicating with it with boto3</h3>
+								<p>This is by far the easiest section. I found navigating SQS and Boto3 docs really easy</p>
+								<ol>
+									<li>
+										Head over to the AWS dashboard and select SQS. From there, you'll be able to make new queues. For this, I'll have made a queue called <code>test-queue1.fifo</code>. Note this is a <a href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html">FIFO Queue</a>. FIFO queues are only available in certain regions (outlined in the docs). When youu first make a queue, only your AWS account will have permissions for it. To give other accounts permissions, you can add users at the SQS queue dashboad:
+									</li>
+									<div class="image main"><img src="images/sqs-user-permissions.png"/></div>
+									<li>
+										Now that we have our queue set up and waiting for messages on the cloud, let's try sending it some messages. The way that we're going to be doing this is using <a href="https://boto3.readthedocs.io/en/latest/">Boto3</a> on the Python interactive shell. Note that doing this will be equivalent to executing the same commands in any Python file - for example in Django. First, we need to install Boto3: <code>pip install boto3</code>. Note that if you need to push code that relies on Boto3 onto EB, you'll need to run this install in your virtual environment and make sure that your <code>requirements.txt</code> is updated properly.
+									</li>
+								</ol>
+
+								<h3>Setting up an AWS Elastic Beanstalk Worker</h3>
 								<p>More Coming Soon!</p>
 							</section>
 

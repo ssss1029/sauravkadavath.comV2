@@ -26,7 +26,7 @@
 						<!-- Post -->
 							<section class="post">
 								<header class="major">
-									<span class="date">April 25, 2017</span>
+									<span class="date">August 22, 2017</span>
 									<h1>Setting up a queueing system on aws</h1>
 									<p>A Django web server on on EB Environment that people can use to add stuff to the queue, an SQS FIFO queue, and a daemon on a separate EB Environment to process our queue.</p>
 								</header>

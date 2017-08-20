@@ -41,7 +41,7 @@
 							<section class="posts">
 								<article>
 									<header>
-										<span class="date">August 17, 2017</span>
+										<span class="date">August 22, 2017</span>
 										<h2><a href="awssqspythonboto3.php">Setting up AWS and FIFO SQS with Python and Boto3</a></h2>
 									</header>
 									<a href="awssqspythonboto3.php" class="image fit"><img src="images/awssqspythonboto3.jpg" alt="" /></a>

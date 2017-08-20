@@ -1,5 +1,18 @@
 $(document).ready(function() {
 
+	console.log(window.location.pathname)
+
+	// Start a lil bit down if not the home page
+	// Production
+	if (window.location.pathname != '/index.php' && window.location.pathname != '/' && window.scrollY < 5) {
+		window.scrollBy(0, 350)
+	}
+
+	// Development Fix
+	if ((window.location.pathname == '/sokadv.comv2/' || window.location.pathname == '/sokadv.comv2/index.php') && window.scrollY < 400) {
+		window.scrollBy(0, -350)
+	}
+
 	// Will be the form at the bottom, with the footer.
 	$('form').submit(function(event) {
 		event.preventDefault();

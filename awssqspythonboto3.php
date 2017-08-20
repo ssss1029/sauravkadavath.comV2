@@ -252,7 +252,7 @@ while(1):
 										</code></pre>
 									</li>
 									<li>
-										AWS EB comes pre-installed with a program called <code><a href="http://supervisord.org/">supervisord</a></code>. What it lets us do here is make sure that our python script keeps running (i.e. restart it) even if something were to cause it to unexpectedly crash. This file needs a configuration file to run, so make a file called <code>supervisord.conf</code>. Put <a>this</a> content into that file. This is the default file that is provided from the <a href="http://supervisord.org/configuration.html"><code>supervisord</code> website</a>. I modified a few lines under the <code>[program:sqsd_v2]</code> heading for our needs. Here are the highlights:
+										AWS EB comes pre-installed with a program called <code><a href="http://supervisord.org/">supervisord</a></code>. What it lets us do here is make sure that our python script keeps running (i.e. restart it) even if something were to cause it to unexpectedly crash. This file needs a configuration file to run, so make a file called <code>supervisord.conf</code>. Put <a href="supervisord.conf" target="_blank">this</a> content into that file. This is the default file that is provided from the <a href="http://supervisord.org/configuration.html"><code>supervisord</code> website</a>. I modified a few lines under the <code>[program:sqsd_v2]</code> heading for our needs. Here are the highlights:
 										<ul>
 											<li>
 												The name of the program that we are running is <code>sqsd_v2</code>. You can tell from the title of the heading.

@@ -33,7 +33,7 @@
 								<!-- No image for this one
 								<div class="image main"><img src="images/pic01.jpg" alt="" /></div>
 								-->
-								<p>So for one of my projects at <a href="http://codebase.berkeley.edu">CodeBase</a>, we had to create a queuing system to handle large amounts of incoming requests for one of out clients. We decided to use a bunch of instances of AWS's brand-new FIFO SQS implementation + an Elastic Beanstalk Worker Environment to keep track of and process requests, while we used an Elastic Beanstalk Web Server environment running Django to handle web requests from clients and feed them to the SQS instances. While I was playing around with these services, I found that there was alot of good documentation about each service but relatively little when it came to starting from scratch (basically, I found all the documentation impossible to navigate as a novice developer) so I made this guide, noob-stlye. I'm writing this after going through the entire process, so its definitely possible that I missed steps. If that's the case, shoot me a message at sauravkadavath@berkeley.edu.</p>
+								<p>So for one of my projects at <a href="http://codebase.berkeley.edu">CodeBase</a>, we had to create a queuing system to handle large amounts of incoming requests for one of out clients. We decided to use a bunch of instances of AWS's brand-new FIFO SQS implementation + an Elastic Beanstalk Worker Environment to keep track of and process requests, while we used an Elastic Beanstalk Web Server environment running Django to handle web requests from clients and feed them to the SQS instances. While I was playing around with these services, I found that there was alot of good documentation about each service but relatively little when it came to starting from scratch (basically, I found all the documentation impossible to navigate as a novice developer) so I made this guide, noob-stlye. I'm writing this after going through the entire process, so its definitely possible that I missed steps. If that's the case, or if you spot any errors, shoot me a message at sauravkadavath@berkeley.edu.</p>
 								<h3>Contents:</h3>
 								<ul>
 									<li>
@@ -182,10 +182,54 @@ option_settings:
 									<li>
 										Now that we have our queue set up and waiting for messages on the cloud, let's try sending it some messages. The way that we're going to be doing this is using <a href="https://boto3.readthedocs.io/en/latest/">Boto3</a> on the Python interactive shell. Note that doing this will be equivalent to executing the same commands in any Python file - for example in Django. First, we need to install Boto3: <code>pip install boto3</code>. Note that if you need to push code that relies on Boto3 onto EB, you'll need to run this install in your virtual environment and make sure that your <code>requirements.txt</code> is updated properly.
 									</li>
+									<li>
+										We need to configure Boto3 because we need to make sure that it knows who we are when we begin talking to AWS SQS. There are several ways to do this, and they're all explained very well <a href="https://boto3.readthedocs.io/en/latest/guide/quickstart.html#configuration">HERE</a> and <a href="https://boto3.readthedocs.io/en/latest/guide/configuration.html#configuring-credentials">HERE</a>. I personally like adding environment variables for Boto3 to work off of with Python at the top of my main file: 
+										<pre><code>
+import os
+
+os.environ["AWS_ACCESS_KEY_ID"] = "YOUR_AWS_ACCESS_KEY_ID"
+os.environ["AWS_SECRET_ACCESS_KEY"] = "YOUR_AWS_SECRET_ACCESS_KEY"
+										</code></pre>
+										Note that these are the same keys that we used before. (They are tied to our account, and are recognized across all AWS services.)
+									</li>
+									<li>
+										Now, we can start attempting to communicate with SQS. These examples are pulled straight off of the <a href="https://boto3.readthedocs.io/en/latest/guide/sqs.html">Boto3 Documentation</a> - which is <i>really</i> good. Open up a python shell, and here is some code to start us off:
+										<pre><code>
+# Configuration
+>>> import os
+>>> os.environ["AWS_ACCESS_KEY_ID"] = "YOUR_AWS_ACCESS_KEY_ID"
+>>> os.environ["AWS_SECRET_ACCESS_KEY"] = "YOUR_AWS_SECRET_ACCESS_KEY"								
+
+# Get the service resource
+>>> sqs = boto3.resource('sqs')
+
+# Get the queue. This returns an <a href="https://boto3.readthedocs.io/en/latest/reference/services/sqs.html#queue">SQS.Queue</a> instance
+>>> queue = sqs.get_queue_by_name(QueueName='test-queue1.fifo')
+
+# You can now access identifiers and attributes
+>>> print(queue.url)
+>>> print(queue.attributes.get('DelaySeconds'))
+
+# Create a new message
+# FIFO queues require <a href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-message-identifiers.html">MessageGroupId</a>s
+>>> queue.send_message(MessageBody='Hello, World! (0)', MessageGroupId='0')
+>>> queue.send_message(MessageBody='Hello, World! (1)', MessageGroupId='0')
+>>> queue.send_message(MessageBody='Hello, World! (2)', MessageGroupId='0')
+
+# Receive the message from the queue
+>>> message = queue.receive_messages(MaxNumberOfMessages=1)
+>>> print(message.body)
+Hello, World! (0)
+
+# Delete the message from the queue
+>>> message.delete()
+										</code></pre>
+										More information can be found <a href="https://boto3.readthedocs.io/en/latest/guide/sqs.html">here</a>.
+									</li>
 								</ol>
 
 								<h3>Setting up an AWS Elastic Beanstalk Worker</h3>
-								<p>More Coming Soon!</p>
+								<p>This was probably the most confusing part of this whole ordeal (maybe because of the lack of documentation for some things on AWS, maybe because of my ignorance :P). What we're going to attempt to do here is set up an AWS Elastic Beanstalk Web Server Environment running Python (a separate environment from the one we set up in the second section). The goal will be to run a Python <a href="https://en.wikipedia.org/wiki/Daemon_(computing)">daemon</a> in the background using <a href="http://supervisord.org/">supervisord</a>. We won't go into actually making this daemon poll our SQS queue, but at the end, it should be pretty apparent how to make this work (see the boto3 setup and guide above).</p>
 							</section>
 
 					</div>

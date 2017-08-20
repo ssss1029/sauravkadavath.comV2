@@ -229,7 +229,32 @@ Hello, World! (0)
 								</ol>
 
 								<h3>Setting up an AWS Elastic Beanstalk Worker</h3>
-								<p>This was probably the most confusing part of this whole ordeal (maybe because of the lack of documentation for some things on AWS, maybe because of my ignorance :P). What we're going to attempt to do here is set up an AWS Elastic Beanstalk Web Server Environment running Python (a separate environment from the one we set up in the second section). The goal will be to run a Python <a href="https://en.wikipedia.org/wiki/Daemon_(computing)">daemon</a> in the background using <a href="http://supervisord.org/">supervisord</a>. We won't go into actually making this daemon poll our SQS queue, but at the end, it should be pretty apparent how to make this work (see the boto3 setup and guide above).</p>
+								<p>This was probably the most confusing part of this whole ordeal (maybe because of the lack of documentation for some things on AWS, maybe because of my ignorance :P). What we're going to attempt to do here is set up an AWS Elastic Beanstalk Web Server Environment running Python (a separate environment from the one we set up in the second section). The goal will be to run a Python <a href="https://en.wikipedia.org/wiki/Daemon_(computing)">daemon</a> in the background using <a href="http://supervisord.org/">supervisord</a>. We won't go into actually making this daemon poll our SQS queue, but at the end, it should be pretty apparent how to make this work (see the boto3 setup and guide above).</p> 
+
+								<p>If the end goal involves making the Environment dynamically change the number of EC2 instances running based on the size of the SQS queue, we can do that using AWS CloudWatch Alarms. Instructions can be found <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-using-sqs-queue.html">here</a>. </p>
+
+								<p>Aite lets get into setting up a simple worker</p>
+								<ol>
+									<li>
+										Spin up a new EB environment. For now, we're going to make a single EC2 instance inside it (as opposed to an auto-scaling group). Make sure you select the right key pair so that we can <code>ssh</code> into it.
+									</li>
+									<li>
+										Lets make the simple python process that we want to run forever. Here's mine: <br /> I called the file <code>sqsd_v2.py</code>.
+										<pre><code>
+import time
+
+the_time = 0
+print("Starting sqsd_v2.py")
+while(1):
+	print("Time = " + str(the_time))
+	time.sleep(5)
+	the_time = the_time + 5
+										</code></pre>
+									</li>
+									<li>
+										
+									</li>
+								</ol>
 							</section>
 
 					</div>

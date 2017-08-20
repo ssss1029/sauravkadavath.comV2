@@ -27,8 +27,8 @@
 							<section class="post">
 								<header class="major">
 									<span class="date">April 25, 2017</span>
-									<h1>Making a queuing system in AWS</h1>
-									<p>Coming Soon!</p>
+									<h1>Setting up a queueing system on aws</h1>
+									<p>Involves: A Django web server on on EB Environment that people can use to add stuff to the queue, an SQS FIFO queue, and a daemon on a separate EB Environment to process our queue.</p>
 								</header>
 								<!-- No image for this one
 								<div class="image main"><img src="images/pic01.jpg" alt="" /></div>
@@ -239,22 +239,80 @@ Hello, World! (0)
 										Spin up a new EB environment. For now, we're going to make a single EC2 instance inside it (as opposed to an auto-scaling group). Make sure you select the right key pair so that we can <code>ssh</code> into it.
 									</li>
 									<li>
-										Lets make the simple python process that we want to run forever. Here's mine: <br /> I called the file <code>sqsd_v2.py</code>.
+										Lets make the simple python process that we want to run forever. Here's mine: <br /> I called the file <code>sqsd_v2.py</code> and saved it in some directory in my local machine
 										<pre><code>
-import time
+import time # time is a built-in package
 
-the_time = 0
+the_time = 0 
 print("Starting sqsd_v2.py")
 while(1):
 	print("Time = " + str(the_time))
-	time.sleep(5)
+	time.sleep(5) # Sleep for 5 seconds
 	the_time = the_time + 5
 										</code></pre>
 									</li>
 									<li>
-										
+										AWS EB comes pre-installed with a program called <code><a href="http://supervisord.org/">supervisord</a></code>. What it lets us do here is make sure that our python script keeps running (i.e. restart it) even if something were to cause it to unexpectedly crash. This file needs a configuration file to run, so make a file called <code>supervisord.conf</code>. Put <a>this</a> content into that file. This is the default file that is provided from the <a href="http://supervisord.org/configuration.html"><code>supervisord</code> website</a>. I modified a few lines under the <code>[program:sqsd_v2]</code> heading for our needs. Here are the highlights:
+										<ul>
+											<li>
+												The name of the program that we are running is <code>sqsd_v2</code>. You can tell from the title of the heading.
+											</li>
+											<li>
+												The actual command we are telling <code>supervisord</code> to execute is <code>python -u sqsd.py</code>. The <code>-u</code> flag is to provide unbuffered binary stdout and stderr output (i.e. it will force  stdin, and stdout to be totally unbuffered). This is necessary for us to view the <code>print()</code> outputs of our script.
+											</li>
+											<li>
+												We have also specified log files: <code>stdout_logfile=~/logs/stdout_logs.log</code> and <code>stderr_logfile=~/logs/stderr_logs.log</code>. These are the files to which our program will output its <code>print()</code> statements. 
+											</li>
+										</ul>
+									</li>
+									<li>
+										Remember the log files from the last step? We actually need to make them for supervisor to be able to use them. So, make two empty files called <code>stdout_logs.log</code> and <code>stderr_logs.log</code> on your machine. We will now push all of these files to the EB machine. 
+									</li>
+									<li>
+										Let's first make the folder for the logs on the EB machine. SSH into it with <code>eb ssh</code> and once you're in, <code>mkdir logs</code>. <code>ls</code> to verify that it has been created and type in <code>exit</code> to exit out of the machine.
+									</li>
+									<li>
+										Now, lets push our files up onto the machine. Run the following commands from where you have the 4 files we just made:
+										<pre><code>scp -i path\to\your\keypair.pem sqsd_v2.py ec2-user@IP_ADDRESS:~/</code></pre>
+										<pre><code>scp -i path\to\your\keypair.pem supervisord.conf ec2-user@IP_ADDRESS:~/</code></pre>
+										<pre><code>scp -i path\to\your\keypair.pem stdout_logs.log ec2-user@IP_ADDRESS:~/logs/</code></pre>
+										<pre><code>scp -i path\to\your\keypair.pem stderr_logs.log ec2-user@IP_ADDRESS:~/logs/</code></pre>
+										Protip: You can copy/paste the key components of this command from the output of <code>eb ssh</code>:
+										<div class="image main"><img src="images/ebssh.png"/></div>
+										Try to <code>eb ssh</code> into the instance. If you <code>ls</code>, you should be able to find all of the files that we transferred.
+									</li>
+									<li>
+										Now, let's try running the program. <code>eb ssh</code> into your instance. Type in the command to start <code>supervisord:</code>
+										<pre><code>supervisord --configuration="supervisord.conf" --nodaemon</code></pre>
+										You should see that the process <code>sqsd_v2</code> is starting. After like 10-15 seconds, Ctrl+c to stop supervisord and check the log file to make sure that we have some stuff in there from the program: <code>vim logs/stdout_logs.log</code>. You should see the <code>print()</code> output from the script. Some notes about what we did:
+										<ul>
+											<li>
+												We ran <code>supervisord</code> with the <code>--nodaemon</code> flag. In production, you would run this without this flag (making he program run in the background) so that the program does not exit when you <code>eb ssh</code> out. You would use <code><a href="http://supervisord.org/introduction.html#supervisor-components">supervisorctl</a></code> to start, stop, and restart processes. More info and advanced usage can be found at the supervisor docs.
+											</li>
+											<li>
+												When running without the <code>--nodaemon</code> option, we can set the log output for <code>supervisord</code> itself with the <code>--logfile=FILE</code> option. 
+											</li>
+											<li>
+												<code>supervisord</code> is a complicated beast - docs are <a href="http://supervisord.org">here</a>.
+											</li>
+										</ul>
 									</li>
 								</ol>
+								<p>
+									Congrats! We've set up alot of stuff:
+									<ul>
+										<li>Our dev environment</li>
+										<li>A Django-powered AWS Elastic Beanstalk Web Server Environment</li>
+										<li>An AWS SQS FIFO Queue</li>
+										<li>Boto3 so that Python can communicate with SQS</li>
+										<li>A very simple worker on an AWS Elastic Beanstalk Web Server Environment using Supervisor </li>
+									</ul>
+									Next steps:
+									<ul>
+										<li>Making the worker communicate with the SQS queue to process whatever tasks you may have on there</li>
+										<li>Perhaps storing results in an <a href="https://aws.amazon.com/s3/">AWS S3</a> Bucket?</li>
+									</ul>
+								</p>
 							</section>
 
 					</div>

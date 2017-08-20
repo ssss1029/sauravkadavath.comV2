@@ -28,7 +28,7 @@
 								<header class="major">
 									<span class="date">April 25, 2017</span>
 									<h1>Setting up a queueing system on aws</h1>
-									<p>Involves: A Django web server on on EB Environment that people can use to add stuff to the queue, an SQS FIFO queue, and a daemon on a separate EB Environment to process our queue.</p>
+									<p>A Django web server on on EB Environment that people can use to add stuff to the queue, an SQS FIFO queue, and a daemon on a separate EB Environment to process our queue.</p>
 								</header>
 								<!-- No image for this one
 								<div class="image main"><img src="images/pic01.jpg" alt="" /></div>

@@ -44,8 +44,8 @@
 										<span class="date">August 17, 2017</span>
 										<h2><a href="awssqspythonboto3.php">Setting up AWS and FIFO SQS with Python and Boto3</a></h2>
 									</header>
-									<a href="awssqspythonboto3.php" class="image fit"><img src="images/pic03.jpg" alt="" /></a>
-									<p> Coming soon! </p>
+									<a href="awssqspythonboto3.php" class="image fit"><img src="images/awssqspythonboto3.jpg" alt="" /></a>
+									<p>A Django web server on on EB Environment that people can use to add stuff to the queue, an SQS FIFO queue, and a daemon on a separate EB Environment to process our queue.</p>
 									<ul class="actions">
 										<li><a href="awssqspythonboto3.php" class="button">Full Story</a></li>
 									</ul>

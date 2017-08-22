@@ -28,12 +28,12 @@
 								<header class="major">
 									<span class="date">August 22, 2017</span>
 									<h1>Setting up a queueing system on aws</h1>
-									<p>A Django web server on on EB Environment that people can use to add stuff to the queue, an SQS FIFO queue, and a daemon on a separate EB Environment to process our queue.</p>
+									<p>A system that goes uses an AWS SQS FIFO Queue to store jobs and an AWS EB Webserver as a worker.</p>
 								</header>
 								<!-- No image for this one
 								<div class="image main"><img src="images/pic01.jpg" alt="" /></div>
 								-->
-								<p>So for one of my projects at <a href="http://codebase.berkeley.edu">CodeBase</a>, we had to create a queuing system to handle large amounts of incoming requests for one of out clients. We decided to use a bunch of instances of AWS's brand-new FIFO SQS implementation + an Elastic Beanstalk Worker Environment to keep track of and process requests, while we used an Elastic Beanstalk Web Server environment running Django to handle web requests from clients and feed them to the SQS instances. While I was playing around with these services, I found that there was alot of good documentation about each service but relatively little when it came to starting from scratch (basically, I found all the documentation impossible to navigate as a novice developer) so I made this guide, noob-stlye. I'm writing this after going through the entire process, so its definitely possible that I missed steps. If that's the case, or if you spot any errors, shoot me a message at sauravkadavath@berkeley.edu.</p>
+								<p>So for one of my projects at <a href="http://codebase.berkeley.edu">CodeBase</a>, we had to create a queuing system to handle large amounts of incoming requests for one of out clients. We decided to use a bunch of instances of AWS's brand-new FIFO SQS implementation + an Elastic Beanstalk Worker Environment to keep track of and process requests, while we used an Elastic Beanstalk Web Server environment running Django to handle web requests from clients and feed them to the SQS instances. While I was playing around with these services, I found that there was a lot of good documentation about each service but relatively little when it came to starting from scratch (basically, I found all the documentation impossible to navigate as a novice developer) so I made this guide, noob-style. I'm writing this after going through the entire process, so it's definitely possible that I missed steps. If that's the case, or if you spot any errors, shoot me a message at sauravkadavath@berkeley.edu.</p>
 								<h3>Contents:</h3>
 								<ul>
 									<li>
@@ -55,7 +55,7 @@
 								<h3> Setting up our development environment </h3>
 								<p>We're going to be deploying <a href="https://aws.amazon.com/elasticbeanstalk/">AWS Elastic Beanstalk</a>, which is essentially a fancy web server that Amazon provides, and scales automatically and stuff. Here's a cool diagram of what it is basically from the AWS website:</p>
 								<div class="image main"><img src="images/aeb-architecture2.png"/></div>
-								<p>The blue outline is an <i>environment</i>. We'll get back to those later. Since each EB instance is essentially a self-contained computer, we'll see need to be careful to make sure whatever code that we push onto Elastic Beanstalk has all of its dependencies enumerated and listed or bundled with the package. In order to do this, we'll need to keep track of all the dependencies that we use on our computer, and we'll use something called <b>virtual environments</b> for this purpose (not to be confused with the EB environments that I mentioned before). We'll be using an environment manager called <code>virtualenv</code>, that comes with <code>pip</code>. For those who don't know what <code>pip</code> is, it's just a package manager for Python (i.e. It keeps track of all of the external Python libraries and packages that you use - one of which is Django). If you have Anaconda installed (from something like EE16A) uninstall it and all of its dependent files, and if you are on Windows, clear all of the environment vairables related to it. After alot of headaches, I figured out that <code>virtualenv</code> and Anaconda don't like to play together, and I couldn't get them to cooperate. If manage to get them to work together, lmk. Given that you don't have Anaconda on your machine and you have Python <b>2.7</b> installed, here's how to keep going:</p>
+								<p>The blue outline is an <i>environment</i>. We'll get back to those later. Since each EB instance is essentially a self-contained computer, we'll see need to be careful to make sure whatever code that we push onto Elastic Beanstalk has all of its dependencies enumerated and listed or bundled with the package. In order to do this, we'll need to keep track of all the dependencies that we use on our computer, and we'll use something called <b>virtual environments</b> for this purpose (not to be confused with the EB environments that I mentioned before). We'll be using an environment manager called <code>virtualenv</code>, that comes with <code>pip</code>. For those who don't know what <code>pip</code> is, it's just a package manager for Python (i.e. It keeps track of all of the external Python libraries and packages that you use - one of which is Django). If you have Anaconda installed (from something like EE16A) uninstall it and all of its dependent files, and if you are on Windows, clear all of the environment variables related to it. After a lot of headaches, I figured out that <code>virtualenv</code> and Anaconda don't like to play together, and I couldn't get them to cooperate. If manage to get them to work together, lmk. Given that you don't have Anaconda on your machine and you have Python <b>2.7</b> installed, here's how to keep going:</p>
 								<ol>
 									<li>
 										Install <code>pip</code> and <code>virtualenv</code> if you don't already have them:
@@ -77,11 +77,11 @@
 										Set up a Django dummy project that we can push to Elastic Beanstalk. Navigate to the folder in which you want your project to live and run <code>django-admin startproject eb-django-proj-1</code>. This is just a 'default' project that does nothing. In order to run it, <code>cd eb-django-proj-1</code> and then <code>python manage.py runserver</code> and then go to the <code>http://127.0.0.1:8000</code>. I found <a href="https://www.youtube.com/watch?v=qgGIqRFvFFk&list=PL6gx4Cwl9DGBlmzzFcLgDhKTTfNLfX1IK">these</a> Django tutorials super helpful.
 									</li>
 									<li>
-										To verify that Django has been installed, type in <code>pip freeze</code>. You should see that Django is installed, and maybe a small amount of its dependencies. The main thing is that you should not see the same massive list of dependencies that you would see if you typed in <code>pip freeze</code> from your global environment. To exit out of your virtual environment, typr in <code>deactivate</code>.
+										To verify that Django has been installed, type in <code>pip freeze</code>. You should see that Django is installed, and maybe a small amount of its dependencies. The main thing is that you should not see the same massive list of dependencies that you would see if you typed in <code>pip freeze</code> from your global environment. To exit out of your virtual environment, type in <code>deactivate</code>.
 									</li>
 								</ol>
 								<h3>Setting up an AWS Elastic Beanstalk Web Server</h3>
-								So now, we basically have all the tool on our computer to develop self-contained Django apps. Now, lets work on moving our work into AWS. If you're the one making the AWS resources yourself, keep reading. Otherwise, if you are an <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html">IAM User</a>, ask your AWS system administrator to give you an access key and access secret, and skip to step 3.
+								So now, we basically have all the tool on our computer to develop self-contained Django apps. Now, let's work on moving our work into AWS. If you're the one making the AWS resources yourself, keep reading. Otherwise, if you are an <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html">IAM User</a>, ask your AWS system administrator to give you an access key and access secret, and skip to step 3.
 								<ol>
 									<li>
 										Make an Elastic Beanstalk application for Python. When doing this, you must make sure that there is a key pair associated with this instance. In order to do this, make sure you have a key pair selected in the EC2 Key Pair dropdown menu: 
@@ -93,7 +93,7 @@
 									<li>
 										In order to deploy our app from our local machine to AWS, we're going to need an access key and secret. Go to the top right of your Elastic Beanstalk dashboard and click on your name, on from the dropdown, click "My Security Credentials". Here, you can set up an access key/secret for yourself. Be sure to keep these safe, as you only get to see them once.
 										<br />
-										Note: If you have other people that you want to be able to deploy to your EB environments, you can create <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html">IAM Users</a> fro each person, and give them their own access keys and secrets.
+										Note: If you have other people that you want to be able to deploy to your EB environments, you can create <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html">IAM Users</a> for each person, and give them their own access keys and secrets.
 									</li>
 									<li>
 										On your local machine, make sure that you are on your global environment, and run <code>pip install awsebcli</code>. This is the <a href="https://en.wikipedia.org/wiki/Command-line_interface">CLI</a> that lets us talk to our EB instances. After you do this, you should be able to find the AWS CLI configuration file – located at <code> ~/.aws/config </code> on Linux and OS X systems or <code>C:\Users\USERNAME\.aws\config</code> on Windows systems. Go into this file and paste the following code in:
@@ -176,7 +176,7 @@ option_settings:
 								<p>This is by far the easiest section. I found navigating SQS and Boto3 docs really easy</p>
 								<ol>
 									<li>
-										Head over to the AWS dashboard and select SQS. From there, you'll be able to make new queues. For this, I'll have made a queue called <code>test-queue1.fifo</code>. Note this is a <a href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html">FIFO Queue</a>. FIFO queues are only available in certain regions (outlined in the docs). When youu first make a queue, only your AWS account will have permissions for it. To give other accounts permissions, you can add users at the SQS queue dashboad:
+										Head over to the AWS dashboard and select SQS. From there, you'll be able to make new queues. For this, I'll have made a queue called <code>test-queue1.fifo</code>. Note this is a <a href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html">FIFO Queue</a>. FIFO queues are only available in certain regions (outlined in the docs). When you first make a queue, only your AWS account will have permissions for it. To give other accounts permissions, you can add users at the SQS queue dashboard:
 									</li>
 									<div class="image main"><img src="images/sqs-user-permissions.png"/></div>
 									<li>
@@ -233,13 +233,13 @@ Hello, World! (0)
 
 								<p>If the end goal involves making the Environment dynamically change the number of EC2 instances running based on the size of the SQS queue, we can do that using AWS CloudWatch Alarms. Instructions can be found <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-using-sqs-queue.html">here</a>. </p>
 
-								<p>Aite lets get into setting up a simple worker</p>
+								<p>Alright; let's get into setting up a simple worker</p>
 								<ol>
 									<li>
 										Spin up a new EB environment. For now, we're going to make a single EC2 instance inside it (as opposed to an auto-scaling group). Make sure you select the right key pair so that we can <code>ssh</code> into it.
 									</li>
 									<li>
-										Lets make the simple python process that we want to run forever. Here's mine: <br /> I called the file <code>sqsd_v2.py</code> and saved it in some directory in my local machine
+										Let's make the simple python process that we want to run forever. Here's mine: <br /> I called the file <code>sqsd_v2.py</code> and saved it in some directory in my local machine
 										<pre><code>
 import time # time is a built-in package
 
@@ -287,7 +287,7 @@ while(1):
 										You should see that the process <code>sqsd_v2</code> is starting. After like 10-15 seconds, Ctrl+c to stop supervisord and check the log file to make sure that we have some stuff in there from the program: <code>vim logs/stdout_logs.log</code>. You should see the <code>print()</code> output from the script. Some notes about what we did:
 										<ul>
 											<li>
-												We ran <code>supervisord</code> with the <code>--nodaemon</code> flag. In production, you would run this without this flag (making he program run in the background) so that the program does not exit when you <code>eb ssh</code> out. You would use <code><a href="http://supervisord.org/introduction.html#supervisor-components">supervisorctl</a></code> to start, stop, and restart processes. More info and advanced usage can be found at the supervisor docs.
+												We ran <code>supervisord</code> with the <code>--nodaemon</code> flag. In production, you would run this without this flag (making the program run in the background) so that the program does not exit when you <code>eb ssh</code> out. You would use <code><a href="http://supervisord.org/introduction.html#supervisor-components">supervisorctl</a></code> to start, stop, and restart processes. More info and advanced usage can be found at the supervisor docs.
 											</li>
 											<li>
 												When running without the <code>--nodaemon</code> option, we can set the log output for <code>supervisord</code> itself with the <code>--logfile=FILE</code> option. 
@@ -299,7 +299,7 @@ while(1):
 									</li>
 								</ol>
 								<p>
-									Congrats! We've set up alot of stuff:
+									Congrats! We've set up a lot of stuff:
 									<ul>
 										<li>Our dev environment</li>
 										<li>A Django-powered AWS Elastic Beanstalk Web Server Environment</li>

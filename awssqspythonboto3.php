@@ -33,7 +33,7 @@
 								<!-- No image for this one
 								<div class="image main"><img src="images/pic01.jpg" alt="" /></div>
 								-->
-								<p>So for one of my projects at <a href="http://codebase.berkeley.edu">CodeBase</a>, we had to create a queuing system to handle large amounts of incoming requests for one of out clients. We decided to use a bunch of instances of AWS's brand-new FIFO SQS implementation + an Elastic Beanstalk Worker Environment to keep track of and process requests, while we used an Elastic Beanstalk Web Server environment running Django to handle web requests from clients and feed them to the SQS instances. While I was playing around with these services, I found that there was a lot of good documentation about each service but relatively little when it came to starting from scratch (basically, I found all the documentation impossible to navigate as a novice developer) so I made this guide, noob-style. I'm writing this after going through the entire process, so it's definitely possible that I missed steps. If that's the case, or if you spot any errors, shoot me a message at sauravkadavath@berkeley.edu.</p>
+								<p>So for one of my side projects, I had to create a queuing system to handle large amounts of incoming HTTP requests. I decided to use a bunch of instances of AWS's brand-new FIFO SQS implementation + an Elastic Beanstalk Worker Environment to keep track of and process requests, and used an Elastic Beanstalk Web Server environment running Django to handle web requests from clients and feed them to the SQS instances. While I was playing around with these services, I found that there was a lot of good documentation about each service but relatively little when it came to starting from scratch (basically, I found all the documentation impossible to navigate as a novice developer) so I made this guide, noob-style. I'm writing this after going through the entire process, so it's definitely possible that I missed steps / did something inefficiently. If that's the case, or if you spot any other errors, shoot me a message at sauravkadavath@berkeley.edu.</p>
 								<h3>Contents:</h3>
 								<ul>
 									<li>
@@ -279,6 +279,8 @@ while(1):
 										<pre><code>scp -i path\to\your\keypair.pem stderr_logs.log ec2-user@IP_ADDRESS:~/logs/</code></pre>
 										Protip: You can copy/paste the key components of this command from the output of <code>eb ssh</code>:
 										<div class="image main"><img src="images/ebssh.png"/></div>
+										Another Protip: If you don't want any 'default' content in your log files, one thing you can do instead of <code>scp</code>ing them is just use the <code>touch</code> command to create the log file in the appropriate place in the EC2 instance.
+										<br />
 										Try to <code>eb ssh</code> into the instance. If you <code>ls</code>, you should be able to find all of the files that we transferred.
 									</li>
 									<li>

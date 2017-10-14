@@ -28,7 +28,7 @@ echo('
         <section class="split contact">
             <section class="alt">
                 <h3>Resume</h3>
-                <p><a href="Resume_SauravK_V2.pdf" target="_blank">Download Here</a></p>
+                <p><a href="SK_resume_v4.pdf" target="_blank">Download Here</a></p>
             </section>
             <section>
                 <h3>Phone</h3>
